@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.di.interactorModule
 import ru.practicum.android.diploma.di.repositoryModule
 import ru.practicum.android.diploma.di.viewModelModule
 
-
 const val SHARED_PREFS = "ChangeYourJob SharedPreferences"
 
 class App : Application() {
