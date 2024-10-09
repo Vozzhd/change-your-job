@@ -20,7 +20,7 @@ interface VacancyDetailsDao {
     @Query("SELECT * FROM $TABLE_NAME")
     fun getVacancies(): Flow<List<VacancyDetailsEntity>>
 
-    @Query("SELECT * FROM $TABLE_NAME WHERE id = :id")
+    @Query("SELECT * FROM $TABLE_NAME WHERE id = :id order by timeAdd DESC")
     fun getVacancyByID(id: String): Flow<VacancyDetailsEntity>
 
     @Update

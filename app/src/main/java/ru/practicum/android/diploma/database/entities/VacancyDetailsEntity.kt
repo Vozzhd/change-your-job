@@ -19,5 +19,6 @@ data class VacancyDetailsEntity(
     val description: String,
     val keySkill: String,
     val vacancyUrl: String,
-    val logoLink: String?
+    val logoLink: String?,
+    val timeAdd: Long
 )

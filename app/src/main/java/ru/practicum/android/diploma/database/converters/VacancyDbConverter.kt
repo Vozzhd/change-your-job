@@ -38,7 +38,8 @@ class VacancyDbConverter {
             description = vacancy.description,
             keySkill = vacancy.keySkills,
             vacancyUrl = vacancy.vacancyUrl,
-            logoLink = vacancy.companyLogo
+            logoLink = vacancy.companyLogo,
+            timeAdd = System.currentTimeMillis()
         )
     }
 
