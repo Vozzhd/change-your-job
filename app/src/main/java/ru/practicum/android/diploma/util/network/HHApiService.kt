@@ -17,4 +17,7 @@ interface HHApiService {
 
     @GET("vacancies/{vacancyId}")
     suspend fun getVacancyDetails(@Path("vacancyId") vacancyId: String): VacancyDetailsResponse
+
+    @GET("areas")
+    suspend fun getRegions()
 }
