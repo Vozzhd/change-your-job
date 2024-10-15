@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.AreaCardBinding
 import ru.practicum.android.diploma.filters.presentation.states.FilterItems
 
-
 class FilterViewHolder(private val binding: AreaCardBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
@@ -15,5 +14,3 @@ class FilterViewHolder(private val binding: AreaCardBinding) :
         }
     }
 }
-
-

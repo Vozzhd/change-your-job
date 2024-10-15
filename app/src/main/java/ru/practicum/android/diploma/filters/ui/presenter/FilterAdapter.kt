@@ -10,7 +10,6 @@ class FilterAdapter(private val clickListener: FilterItemClickListern) : Recycle
 
     val items = ArrayList<FilterItems>()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = AreaCardBinding.inflate(layoutInflater, parent, false)
@@ -30,8 +29,6 @@ class FilterAdapter(private val clickListener: FilterItemClickListern) : Recycle
     }
 }
 
-
 fun interface FilterItemClickListern {
     fun onItemClick(item: FilterItems)
 }
-

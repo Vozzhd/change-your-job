@@ -13,12 +13,13 @@ import ru.practicum.android.diploma.filters.presentation.states.FiltersChooserSc
 import ru.practicum.android.diploma.util.network.HttpStatusCode
 
 class CityViewModel(
-    //private val countryId : String,
+    //private val countryId : String?,
     private val filterInteractor: FilterAreaInteractor
 ) : ViewModel() {
 
 
-    val countryId = "113"
+    val countryId = "40" //Тестовая переменная
+
     private val stateLiveData = MutableLiveData<FiltersChooserScreenState>()
     fun observeState(): LiveData<FiltersChooserScreenState> = stateLiveData
 
@@ -63,45 +64,42 @@ class CityViewModel(
         }
     }
 
-
     private fun getRegionsByParentId(areas: List<Area>, parentId: String?): List<FilterItems.Region> {
-        val specificRegions = mutableListOf<Area>()
-        val finalRegions = mutableListOf<Area>()
-        val allRegions = specificRegions + finalRegions
+        val allRegions = mutableListOf<Area>()
+
         fun collectRegions(currentAreas: List<Area>) {
             for (area in currentAreas) {
-                // Если parentId равен null, собираем все регионы, кроме стран (страны не имеют parentId)
-                if (parentId != null) {
-                    if (area.parentId != null) {
-                        specificRegions.add(area)
-                    }
+                allRegions.add(area)
+                if (area.areas.isNotEmpty()) {
+                    collectRegions(area.areas)
                 }
-                // Если parentId передан, ищем регионы с этим parentId
-                else if (area.parentId == parentId) {
-                    specificRegions.add(area)
-                }
-                // Рекурсивно продолжаем собирать вложенные регионы
-                collectRegions(area.areas)
             }
         }
-        fun collectFinish(currentAreas: List<Area>) {
-            for (area in currentAreas) {
-                    if (area.areas.isEmpty()) {
-                        finalRegions.add(area)
-                    }
-                collectRegions(area.areas)
-            }
-        }
-
 
         collectRegions(areas)
-        collectFinish(specificRegions)
-        Log.d("Tag","$specificRegions")
-        Log.d("Tag","$finalRegions")
-        Log.d("Tag","$allRegions")
-        return allRegions
-            .sortedBy { it.name }
-            .map { FilterItems.Region(it.id, it.name) }
+        Log.d("Tag", "${allRegions}")
+
+        return when {
+            parentId.isNullOrEmpty() -> {
+                allRegions
+                    .filter { it.areas.isEmpty() && it.parentId != null }
+                    .map { FilterItems.Region(it.id, it.name) }
+                    .distinctBy { it.id }
+                    .sortedBy { it.name }
+            }
+
+            else -> {
+
+                allRegions
+                    .filter { it.parentId == parentId }
+                    .flatMap { area ->
+                        listOf(FilterItems.Region(area.id, area.name)) +
+                            area.areas.map { FilterItems.Region(it.id, it.name) }
+                    }
+                    .distinctBy { it.id }
+                    .sortedBy { it.name }
+            }
+        }
     }
-    }
+}
 

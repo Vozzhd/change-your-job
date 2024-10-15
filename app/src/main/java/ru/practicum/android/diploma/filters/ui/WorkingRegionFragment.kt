@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.WorkingRegionFragmentBinding
-import ru.practicum.android.diploma.filters.presentation.states.FiltersChooserScreenState
 
 class WorkingRegionFragment : Fragment() {
     private var _binding: WorkingRegionFragmentBinding? = null
@@ -17,10 +16,6 @@ class WorkingRegionFragment : Fragment() {
 
     private val countryId by lazy { requireArguments().getString(COUNTRY_ID) }
     private val cityId by lazy { requireArguments().getString(CITY_ID) }
-
-    //private val viewModel by viewModel<WorkingRegionFragment> {
-    //    parametersOf(countryId)
-    //}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,4 +55,3 @@ class WorkingRegionFragment : Fragment() {
         }
     }
 }
-

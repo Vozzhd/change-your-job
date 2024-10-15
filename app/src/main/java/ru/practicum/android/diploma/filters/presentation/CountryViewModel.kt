@@ -39,7 +39,6 @@ class CountryViewModel(
         }
     }
 
-
     private fun processResult(foundCountries: List<Area>?, errorMessage: HttpStatusCode?) {
 
         when {

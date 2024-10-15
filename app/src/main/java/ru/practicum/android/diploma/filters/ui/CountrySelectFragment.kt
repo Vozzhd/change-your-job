@@ -45,6 +45,9 @@ class CountrySelectFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.adapter = adapter
+        binding.toolBar.setNavigationOnClickListener{
+            findNavController().popBackStack()
+        }
 
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -84,6 +87,7 @@ class CountrySelectFragment : Fragment() {
         binding.imagePlaceholder.setImageResource(R.drawable.empty_area_placeholder)
         binding.textPlaceholder.setText(R.string.area_not_found)
     }
+
     fun showErrorScreen() {
         binding.placeholder.isVisible = true
         binding.recyclerView.isVisible = false
