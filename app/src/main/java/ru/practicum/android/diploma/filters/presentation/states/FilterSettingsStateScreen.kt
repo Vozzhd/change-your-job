@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filters.presentation
+package ru.practicum.android.diploma.filters.presentation.states
 
 sealed class FilterSettingsStateScreen {
     data class FilterSettings(

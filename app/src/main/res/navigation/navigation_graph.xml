@@ -33,12 +33,20 @@
         android:id="@+id/citySelectFragment"
         android:name="ru.practicum.android.diploma.filters.ui.CitySelectFragment"
         android:label="city_select_fragment"
-        tools:layout="@layout/city_select_fragment" />
+        tools:layout="@layout/city_select_fragment" >
+        <action
+            android:id="@+id/action_citySelectFragment_to_workingRegionFragment"
+            app:destination="@id/workingRegionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/countrySelectFragment"
         android:name="ru.practicum.android.diploma.filters.ui.CountrySelectFragment"
         android:label="country_select_fragment"
-        tools:layout="@layout/country_select_fragment" />
+        tools:layout="@layout/country_select_fragment" >
+        <action
+            android:id="@+id/action_countrySelectFragment_to_workingRegionFragment"
+            app:destination="@id/workingRegionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/branchSelectFragment"
         android:name="ru.practicum.android.diploma.filters.ui.BranchSelectFragment"

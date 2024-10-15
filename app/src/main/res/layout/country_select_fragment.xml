@@ -23,6 +23,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/toolbar_vertical_padding"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/area_card" />
+
+
+    <FrameLayout
+        android:id="@+id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="72dp"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/image_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/padding_horizontal_size_16"
+            android:src="@drawable/empty_area_placeholder"
+            tools:ignore="contentDescription"/>
+
+        <TextView
+            android:id="@+id/text_placeholder"
+            style="@style/Text_Medium_22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="350dp"
+            android:text="@string/area_not_found" />
+    </FrameLayout>
 
 </LinearLayout>

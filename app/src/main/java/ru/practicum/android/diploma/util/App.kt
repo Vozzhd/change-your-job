@@ -15,17 +15,12 @@ import ru.practicum.android.diploma.filters.domain.api.FilterAreaRepository
 
 class App : Application() {
 
-    private val repository: FilterAreaRepository by inject()
-
     override fun onCreate() {
         super.onCreate()
 
         startKoin {
             androidContext(this@App)
             modules(dataModule, interactorModule, repositoryModule, viewModelModule)
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.loadAllRegions()
         }
     }
 }
