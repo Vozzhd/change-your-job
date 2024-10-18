@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.vacancy.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ class VacancyDetailFragment : Fragment() {
     private val viewModel by viewModel<VacancyDetailsViewModel> {
         parametersOf(vacancyId)
     }
+    private var vacancyUrl: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +46,15 @@ class VacancyDetailFragment : Fragment() {
         }
 
         binding.shareButton.setOnClickListener {
-            viewModel.share(requireContext())
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, vacancyUrl)
+                type = "text/plain"
+            }
+            val share = Intent.createChooser(intent, null)
+            share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context?.startActivity(share)
+
         }
 
         viewModel.getVacancyState().observe(viewLifecycleOwner) { state ->
@@ -65,10 +75,14 @@ class VacancyDetailFragment : Fragment() {
 
     private fun renderState(state: VacancyScreenState) {
         when (state) {
-            is VacancyScreenState.ContentState -> showContent(state.vacancy)
-            VacancyScreenState.EmptyState -> showEmpty()
-            VacancyScreenState.LoadingState -> showLoading()
-            VacancyScreenState.NetworkErrorState -> showNetworkError()
+            is VacancyScreenState.ContentState -> {
+                vacancyUrl = state.vacancy.vacancyUrl
+                showContent(state.vacancy)
+            }
+
+            is VacancyScreenState.EmptyState -> showEmpty()
+            is VacancyScreenState.LoadingState -> showLoading()
+            is VacancyScreenState.NetworkErrorState -> showNetworkError()
         }
     }
 
@@ -85,7 +99,7 @@ class VacancyDetailFragment : Fragment() {
             city.text = vacancy.address
             experience.text = vacancy.experience
             scheduleAndEmployment.text = getScheduleAndEmployment(vacancy)
-            description.text = Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_COMPACT)
+            description.text = Html.fromHtml(vacancy.description, Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM)
             if (vacancy.keySkills.isEmpty()) {
                 keySkillTitle.visibility = View.GONE
             } else {
@@ -104,14 +118,11 @@ class VacancyDetailFragment : Fragment() {
     }
 
     private fun getScheduleAndEmployment(vacancy: Vacancy): String {
-        return if (vacancy.employment == null && vacancy.schedule == null) {
-            ""
-        } else if (vacancy.schedule == null) {
-            vacancy.employment ?: ""
-        } else if (vacancy.employment == null) {
-            vacancy.schedule
-        } else {
-            "${vacancy.employment}, ${vacancy.schedule}"
+        return when {
+            vacancy.employment == null && vacancy.schedule == null -> ""
+            vacancy.employment == null && vacancy.schedule != null -> vacancy.schedule
+            vacancy.employment != null && vacancy.schedule == null -> vacancy.employment
+            else -> "${vacancy.employment}, ${vacancy.schedule}"
         }
     }
 
@@ -145,9 +156,9 @@ class VacancyDetailFragment : Fragment() {
     private fun renderFavorite(current: Boolean) {
         binding.favoriteButton.setImageResource(
             if (current) {
-                R.drawable.ic_favorites_on__24px
+                R.drawable.ic_favorites_on_24px
             } else {
-                R.drawable.ic_favorites_off__24px
+                R.drawable.ic_favorites_off_24px
             }
         )
     }

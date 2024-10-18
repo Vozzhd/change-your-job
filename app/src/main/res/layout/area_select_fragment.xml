@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tool:contex=".filters.ui.WorkingRegionFragment">
+
+    <Toolbar
+        android:id="@+id/tool_bar"
+        style="@style/BaseToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetStartWithNavigation="0dp"
+        android:navigationIcon="@drawable/ic_arrow_back_24px"
+        android:paddingVertical="4dp"
+        android:title="@string/choose_place_for_work"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/area_input_layout"
+        style="@style/FilterTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_horizontal_size_16"
+        android:hint="@string/country"
+        app:endIconDrawable="@drawable/ic_arrow_forward_24px"
+        app:endIconMode="custom"
+        app:endIconTint="@color/colorAdaptiveText"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/country_select"
+            style="@style/FilterEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/region_input_layout"
+        style="@style/FilterTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/region"
+        app:endIconDrawable="@drawable/ic_arrow_forward_24px"
+        app:endIconMode="custom"
+        app:endIconTint="@color/colorAdaptiveText"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/area_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/region_select"
+            style="@style/FilterEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button style="@style/BlueButtonStyle"
+        android:id="@+id/apply_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/choose"
+        android:layout_marginHorizontal="@dimen/padding_horizontal_size_16"
+        android:layout_marginBottom="@dimen/title_top_margin_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="visible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

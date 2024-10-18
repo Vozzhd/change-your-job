@@ -4,16 +4,155 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tool:context=".filters.ui.FilterSettingsFragment">
+    tool:context=".filters.base.ui.FilterSettingsFragment">
+
+    <Toolbar
+        android:id="@+id/tool_bar"
+        style="@style/BaseToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetStartWithNavigation="0dp"
+        android:navigationIcon="@drawable/ic_arrow_back_24px"
+        android:paddingVertical="4dp"
+        android:title="@string/filter_settings"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/area_input_layout"
+        style="@style/FilterTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_horizontal_size_16"
+        android:hint="@string/job_place"
+        app:endIconDrawable="@drawable/ic_arrow_forward_24px"
+        app:endIconMode="custom"
+        app:endIconTint="@color/colorAdaptiveText"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/area_edit_text"
+            style="@style/FilterEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/industry_input_layout"
+        style="@style/FilterTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/industry"
+        app:endIconDrawable="@drawable/ic_arrow_forward_24px"
+        app:endIconMode="custom"
+        app:endIconTint="@color/colorAdaptiveText"
+        android:focusable="false"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/area_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/industry_edit_text"
+            style="@style/FilterEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <FrameLayout
+        android:id="@+id/input_layout_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/padding_horizontal_size_16"
+        android:layout_marginTop="@dimen/filter_item_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/industry_input_layout">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            style="@style/CustomTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/expected_salary"
+            app:placeholderText="@string/input_sum">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text"
+                style="@style/CustomEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/search_line_cleaner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:paddingHorizontal="@dimen/padding_horizontal_size_16"
+            android:src="@drawable/ic_close_24px"
+            android:visibility="gone"
+            tool:ignore="contentDescription" />
+
+    </FrameLayout>
 
     <TextView
-        style="@style/Text_Medium_22"
+        android:id="@+id/without_salary_title"
+        style="@style/Text_Regular_16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/filters"
+        android:layout_marginStart="@dimen/padding_horizontal_size_16"
+        android:text="@string/dont_show_without_salary"
+        app:layout_constraintBottom_toBottomOf="@id/salary_checkbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/salary_checkbox" />
+
+    <CheckBox
+        android:id="@+id/salary_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/padding_horizontal_size_16"
+        android:layout_marginTop="@dimen/filter_item_margin"
+        android:buttonTint="@color/blue"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_layout_box" />
+
+    <Button
+        android:id="@+id/apply_button"
+        style="@style/BlueButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="@dimen/padding_horizontal_size_16"
+        android:text="@string/apply"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/clear_filter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/clear_filter"
+        style="@style/WhiteButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="@dimen/padding_horizontal_size_16"
+        android:layout_marginBottom="@dimen/title_top_margin_24"
+        android:text="@string/clear"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
