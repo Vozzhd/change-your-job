@@ -101,6 +101,6 @@ class IndustrySelectViewModel(
 
     companion object {
         private const val DEFAULT_SEARCH_VALUE = ""
-        private const val SEARCH_DEBOUNCE_DELAY = 100L
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 }
