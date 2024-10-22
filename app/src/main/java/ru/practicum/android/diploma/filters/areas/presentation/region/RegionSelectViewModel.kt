@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_AUTO
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filters.areas.domain.api.AreaCashInteractor
 import ru.practicum.android.diploma.filters.areas.domain.api.FilterAreaInteractor
