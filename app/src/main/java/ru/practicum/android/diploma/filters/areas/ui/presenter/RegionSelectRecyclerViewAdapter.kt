@@ -47,8 +47,10 @@ class RegionSelectRecyclerViewAdapter(
                 .contains(request)
         }
 
-        previousList.clear()
-        previousList.addAll(list)
+        if (filteredList.isNotEmpty()) {
+            previousList.clear()
+            previousList.addAll(list)
+        }
         previousRequest = request
 
         list.clear()
