@@ -109,7 +109,11 @@ class RegionSelectViewModel(
         val regionsAndCities = mutableListOf<Area>()
         regionsAndCities.addAll(filteredRegionList)
         filteredRegionList.forEach { area ->
-            regionsAndCities.addAll(area.areas)
+
+            val new = area.areas.map { it.copy(parentId = area.parentId) }
+            regionsAndCities.addAll(
+                area.copy(areas = new).areas
+            )
         }
         return regionsAndCities
     }
