@@ -90,12 +90,14 @@ class BaseAreaSelectFragment : Fragment() {
                     setText(fields.first)
                     isActivated = true
                 }
+                binding.applyButton.visibility = View.VISIBLE
                 binding.countryInputLayout.setEndIconDrawable(R.drawable.ic_close_24px)
             } else {
                 binding.countrySelect.apply {
                     setText("")
                     isActivated = false
                 }
+                binding.applyButton.visibility = View.GONE
                 binding.countryInputLayout.setEndIconDrawable(R.drawable.ic_arrow_forward_24px)
             }
 
