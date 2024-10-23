@@ -30,7 +30,7 @@ class IndustrySelectRecyclerViewAdapter(
         if (itemView.isChecked) lastSelect = position
 
         holder.itemView.setOnClickListener {
-            list[lastSelect] = list[lastSelect].copy(isChecked = false)
+            if (lastSelect <= position) list[lastSelect] = list[lastSelect].copy(isChecked = false)
             if (list.size > position) {
                 list[position] = list[position].copy(isChecked = true)
             }
