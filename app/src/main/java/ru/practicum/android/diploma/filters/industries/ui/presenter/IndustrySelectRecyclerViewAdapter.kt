@@ -14,6 +14,7 @@ class IndustrySelectRecyclerViewAdapter(
     var lastSelect = 0
     private var previousList = mutableListOf<Industry>()
     private var previousRequest: String = ""
+    private var selectedIndustry: Industry? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -27,16 +28,20 @@ class IndustrySelectRecyclerViewAdapter(
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val itemView = list[position]
         holder.bind(itemView)
-        if (itemView.isChecked) lastSelect = position
+        if (itemView.isChecked) selectedIndustry = itemView
 
         holder.itemView.setOnClickListener {
-            if (lastSelect <= position) list[lastSelect] = list[lastSelect].copy(isChecked = false)
-            if (list.size > position) {
-                list[position] = list[position].copy(isChecked = true)
+            val i = list.indexOf(selectedIndustry)
+            if (i >= 0) {
+                list[i] = list[i].copy(isChecked = false)
+                selectedIndustry = itemView
             }
-            lastSelect = position
+
             clickListener.onClick(itemView)
-            holder.selectItem()
+            val j = list.indexOf(itemView)
+            if (j >= 0) {
+                list[j] = list[j].copy(isChecked = true)
+            }
         }
     }
 
