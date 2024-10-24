@@ -11,7 +11,7 @@ class IndustrySelectRecyclerViewAdapter(
 ) : RecyclerView.Adapter<IndustriesViewHolder>() {
 
     var list = mutableListOf<Industry>()
-    var lastSelect = 0
+
     private var previousList = mutableListOf<Industry>()
     private var previousRequest: String = ""
 
@@ -23,18 +23,16 @@ class IndustrySelectRecyclerViewAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
-
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val itemView = list[position]
         holder.bind(itemView)
-        if (itemView.isChecked) lastSelect = position
 
         holder.itemView.setOnClickListener {
-            if (lastSelect <= position) list[lastSelect] = list[lastSelect].copy(isChecked = false)
-            if (list.size > position) {
-                list[position] = list[position].copy(isChecked = true)
+            list.forEach { industry ->
+                industry.isChecked = false
             }
-            lastSelect = position
+            itemView.isChecked = true
+
             clickListener.onClick(itemView)
             holder.selectItem()
         }
