@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filters.industries.ui.presenter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ class IndustrySelectRecyclerViewAdapter(
     private var selectedIndustry: Industry? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
+        getSavedIndustry()
         val view = LayoutInflater.from(parent.context)
         return IndustriesViewHolder(IndustryCardBinding.inflate(view, parent, false))
     }
@@ -32,6 +34,7 @@ class IndustrySelectRecyclerViewAdapter(
 
         holder.itemView.setOnClickListener {
             val i = list.indexOf(selectedIndustry)
+            Log.d("MyTag", selectedIndustry.toString())
             if (i >= 0) {
                 list[i] = list[i].copy(isChecked = false)
                 selectedIndustry = itemView
@@ -69,6 +72,12 @@ class IndustrySelectRecyclerViewAdapter(
         list.clear()
         list.addAll(filteredList)
         notifyDataSetChanged()
+    }
+
+    private fun getSavedIndustry() {
+        list.forEach {
+            if (it.isChecked) selectedIndustry = it
+        }
     }
 
     fun interface IndustryClickListener {
