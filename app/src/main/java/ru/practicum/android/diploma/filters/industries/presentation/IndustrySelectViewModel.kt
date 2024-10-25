@@ -66,9 +66,7 @@ class IndustrySelectViewModel(
 
     private val industrySearchDebounce =
         debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
-            stateLiveData.postValue(
-                IndustrySelectScreenState.FilterRequest(changedText)
-            )
+            setFilteredRequestState(changedText)
         }
 
     fun searchDebounce(changedText: String) {
@@ -97,6 +95,14 @@ class IndustrySelectViewModel(
         chosenIndustry =
             requestBuilderInteractor.getBufferedSavedFilters().savedIndustry
         return chosenIndustry
+    }
+
+    private fun setFilteredRequestState(request: String) {
+        if (request.isNotEmpty()) {
+            stateLiveData.postValue(
+                IndustrySelectScreenState.FilterRequest(request)
+            )
+        }
     }
 
     companion object {
