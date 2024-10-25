@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.util.network
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.filters.areas.data.FilterAreasRequest
 import ru.practicum.android.diploma.filters.areas.data.FilterAreasResponse
 import ru.practicum.android.diploma.filters.industries.data.dto.FilterIndustriesRequest
@@ -42,6 +43,9 @@ class RetrofitNetworkClient(
                 } catch (ioException: IOException) {
                     responseCode.resultCode = HttpStatusCode.INTERNAL_SERVER_ERROR
                     println(ioException)
+                } catch (httpException: HttpException) {
+                    responseCode.resultCode = HttpStatusCode.BAD_REQUEST
+                    println(httpException)
                 }
             }
         }
