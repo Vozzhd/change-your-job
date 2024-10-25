@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filters.areas.domain.api.AreaCashInteractor
 import ru.practicum.android.diploma.filters.areas.domain.api.FilterAreaInteractor
 import ru.practicum.android.diploma.filters.areas.domain.models.Area
+import ru.practicum.android.diploma.filters.industries.presentation.IndustrySelectScreenState
 import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.network.HttpStatusCode
 
@@ -66,9 +67,7 @@ class RegionSelectViewModel(
 
     private val regionSelectDebounce =
         debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
-            stateLiveData.postValue(
-                RegionSelectScreenState.FilterRequest(changedText)
-            )
+            setFilteredRequestState(changedText)
         }
 
     fun searchDebounce(changedText: String) {
@@ -120,6 +119,14 @@ class RegionSelectViewModel(
 
     private fun renderState(state: RegionSelectScreenState) {
         stateLiveData.postValue(state)
+    }
+
+    private fun setFilteredRequestState(request: String) {
+        if (request.isNotEmpty()) {
+            stateLiveData.postValue(
+                RegionSelectScreenState.FilterRequest(request)
+            )
+        }
     }
 
     fun finishSelect(area: Area, countryList: List<Area>) {
