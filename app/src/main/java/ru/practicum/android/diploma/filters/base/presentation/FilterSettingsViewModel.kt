@@ -6,47 +6,91 @@ import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.search.data.model.SavedFilters
 import ru.practicum.android.diploma.search.domain.api.RequestBuilderInteractor
 
-class FilterSettingsViewModel(private val requestBuilderInteractor: RequestBuilderInteractor) : ViewModel() {
+class FilterSettingsViewModel(
+    private val requestBuilderInteractor: RequestBuilderInteractor,
+) : ViewModel() {
 
     private val baseFilterScreenState: MutableLiveData<FilterSettingsStateScreen> = MutableLiveData()
     val getBaseFiltersScreenState: LiveData<FilterSettingsStateScreen> = baseFilterScreenState
-    private fun initFilters(): SavedFilters {
-        return requestBuilderInteractor.getSavedFilters()
+    private var currentFilters: SavedFilters? = null
+    private var savedFilters: SavedFilters = requestBuilderInteractor.getSavedFilters()
+
+    init {
+        requestBuilderInteractor.updateBufferedSavedFilters(requestBuilderInteractor.getSavedFilters())
     }
 
     fun checkFilterFields() {
-        val filters = initFilters()
+        currentFilters = requestBuilderInteractor.getBufferedSavedFilters()
+        val area = currentFilters?.savedArea
+        val areaName: String = if (!area?.name.isNullOrBlank()) {
+            "${area?.parentName}, ${area?.name}"
+        } else {
+            area?.parentName ?: ""
+        }
+
         baseFilterScreenState.value =
             FilterSettingsStateScreen.FilterSettings(
-                filters.savedArea ?: "",
-                filters.savedIndustry ?: "",
-                filters.savedSalary ?: "",
-                filters.savedIsShowWithSalary ?: false
+                areaName,
+                currentFilters?.savedIndustry?.name ?: "",
+                currentFilters?.savedSalary ?: "",
+                currentFilters?.savedIsShowWithSalary ?: false
             )
     }
 
-    fun setText(text: String) {
-        // добавляет в запрос текст поиска
+    fun checkFilter(): Boolean {
+        return !(
+            currentFilters?.savedArea == null &&
+                currentFilters?.savedSalary.isNullOrEmpty() &&
+                currentFilters?.savedIndustry == null &&
+                currentFilters?.savedIsShowWithSalary == false
+            )
     }
 
-    fun setArea(area: String) {
-        // добавляет в запрос регион поиска и сохраняет его в sharedPrefs
+    fun compareFilters(): Boolean = savedFilters == currentFilters
+
+    fun clearCurrentArea() {
+        currentFilters = currentFilters?.copy(savedArea = null)
     }
 
-    fun setIndustry(industry: String) {
-        // добавляет в запрос отрасль работы и сохраняет её в sharedPrefs
+    fun clearCurrentIndustry() {
+        currentFilters = currentFilters?.copy(savedIndustry = null)
+    }
+
+    fun updateSalaryCheckbox(isChecked: Boolean) {
+        currentFilters = currentFilters?.copy(savedIsShowWithSalary = isChecked)
+    }
+
+    fun updateSalary(newSalary: String) {
+        currentFilters = currentFilters?.copy(savedSalary = newSalary)
+    }
+
+    fun clearFilter() {
+        requestBuilderInteractor.clearAllFilters()
+        currentFilters = requestBuilderInteractor.getBufferedSavedFilters()
+    }
+
+    fun cleanCashArea() {
+        requestBuilderInteractor.updateBufferedSavedFilters(
+            requestBuilderInteractor.getBufferedSavedFilters().copy(savedArea = null)
+        )
+    }
+
+    fun clearIndustry() {
+        requestBuilderInteractor.updateBufferedSavedFilters(
+            requestBuilderInteractor.getBufferedSavedFilters().copy(savedIndustry = null)
+        )
     }
 
     fun setSalary(salary: String) {
-        // добавляет в запрос желаемую ЗП и сохраняет её в sharedPrefs
+        requestBuilderInteractor.setSalary(salary)
     }
 
     fun setIsShowWithSalary(isShowWithSalary: Boolean) {
-        // добавляет в запрос переменную "показывать только с указанной ЗП" и сохраняет её в sharedPrefs
+        requestBuilderInteractor.setIsShowWithSalary(isShowWithSalary)
     }
 
-    fun getRequest(): HashMap<String, String> {
-        return TODO() // отдаёт собранный запрос
+    fun saveFilters() {
+        requestBuilderInteractor.saveFiltersToShared()
     }
 
 }

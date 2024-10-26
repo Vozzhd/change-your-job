@@ -41,8 +41,12 @@ class IndustrySelectViewModel(
             HttpStatusCode.OK -> {
                 if (foundIndustries != null) {
                     if (foundIndustries.isNotEmpty()) {
+                        val savedIndustry = getSaveIndustry()
+                        val industryList: List<Industry> = foundIndustries.map { industry ->
+                            if (industry == savedIndustry) savedIndustry else industry
+                        }
                         stateLiveData.value = IndustrySelectScreenState.ChooseItem(
-                            foundIndustries
+                            industryList
                         )
                     } else {
                         stateLiveData.value = IndustrySelectScreenState.Empty
@@ -53,6 +57,7 @@ class IndustrySelectViewModel(
             HttpStatusCode.NOT_CONNECTED ->
                 stateLiveData.value =
                     IndustrySelectScreenState.NetworkError
+
             else -> {
                 stateLiveData.value = IndustrySelectScreenState.ServerError
             }
@@ -61,29 +66,47 @@ class IndustrySelectViewModel(
 
     private val industrySearchDebounce =
         debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
-            stateLiveData.postValue(
-                IndustrySelectScreenState.FilterRequest(changedText)
-            )
+            setFilteredRequestState(changedText)
         }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText != changedText) {
-            latestSearchText = changedText
-            industrySearchDebounce(changedText)
+        if (changedText.isEmpty()) {
+            industrySearchDebounce(DEFAULT_SEARCH_VALUE)
+            loadIndustries()
+        } else {
+            if (latestSearchText != changedText) {
+                latestSearchText = changedText
+                industrySearchDebounce(changedText)
+            }
         }
     }
 
     fun onItemClick(industry: Industry) {
-        chosenIndustry = industry
+        chosenIndustry = industry.copy(isChecked = true)
     }
 
     fun transferIndustryToQuery() {
         if (chosenIndustry != null) {
-            requestBuilderInteractor.setIndustry(chosenIndustry!!.id)
+            requestBuilderInteractor.setIndustry(chosenIndustry!!)
+        }
+    }
+
+    private fun getSaveIndustry(): Industry? {
+        chosenIndustry =
+            requestBuilderInteractor.getBufferedSavedFilters().savedIndustry
+        return chosenIndustry
+    }
+
+    private fun setFilteredRequestState(request: String) {
+        if (request.isNotEmpty()) {
+            stateLiveData.postValue(
+                IndustrySelectScreenState.FilterRequest(request)
+            )
         }
     }
 
     companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val DEFAULT_SEARCH_VALUE = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 }

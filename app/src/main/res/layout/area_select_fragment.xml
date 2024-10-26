@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:contentInsetStartWithNavigation="0dp"
         android:navigationIcon="@drawable/ic_arrow_back_24px"
-        android:paddingVertical="4dp"
+        android:paddingVertical="0dp"
         android:title="@string/choose_place_for_work"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/area_input_layout"
+        android:id="@+id/country_input_layout"
         style="@style/FilterTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         app:endIconTint="@color/colorAdaptiveText"
         android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/area_input_layout">
+        app:layout_constraintTop_toBottomOf="@id/country_input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/region_select"
@@ -78,6 +78,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

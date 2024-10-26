@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.search.domain.api.RequestBuilderInteractor
 import ru.practicum.android.diploma.search.domain.api.SearchVacancyInteractor
 import ru.practicum.android.diploma.search.domain.models.VacancyListResponseData
 import ru.practicum.android.diploma.search.domain.models.VacancySearch
@@ -12,7 +13,8 @@ import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.network.HttpStatusCode
 
 class VacancySearchViewModel(
-    private val interactor: SearchVacancyInteractor,
+    private val searchVacancyInteractor: SearchVacancyInteractor,
+    private val requestBuilderInteractor: RequestBuilderInteractor
 ) : ViewModel() {
 
     private var latestSearchText: String? = null
@@ -21,15 +23,17 @@ class VacancySearchViewModel(
     private val stateLiveData = MutableLiveData<VacancySearchScreenState>()
     private val currentVacancyList = mutableListOf<VacancySearch>()
     fun getStateObserve(): LiveData<VacancySearchScreenState> = stateLiveData
-    private val query = HashMap<String, String>()
+
+    private var query = requestBuilderInteractor.getRequest()
 
     fun loadData(text: String) {
+        query = requestBuilderInteractor.getRequest()
         if (text.isNotEmpty()) {
             stateLiveData.value = VacancySearchScreenState.Loading
             query["text"] = text
             query["page"] = "0"
             viewModelScope.launch {
-                interactor
+                searchVacancyInteractor
                     .getVacancyList(query)
                     .collect { pairFoundAndMessage ->
                         vacanciesSearchData = pairFoundAndMessage.first
@@ -43,13 +47,23 @@ class VacancySearchViewModel(
         query["text"] = changedText
         query["page"] = vacanciesSearchData?.page?.plus(1).toString()
         viewModelScope.launch {
-            interactor
+            searchVacancyInteractor
                 .getVacancyList(query)
                 .collect { pairFoundAndMessage ->
                     vacanciesSearchData = pairFoundAndMessage.first
                     nextPageProcessingState(pairFoundAndMessage.first?.items, pairFoundAndMessage.second)
                 }
         }
+    }
+
+    fun checkFilter(): Boolean {
+        val filter = requestBuilderInteractor.getSavedFilters()
+        return !(
+            filter.savedArea == null &&
+                filter.savedSalary.isNullOrEmpty() &&
+                filter.savedIndustry == null &&
+                filter.savedIsShowWithSalary == false
+            )
     }
 
     fun searchDebounce(changedText: String) {
@@ -72,7 +86,7 @@ class VacancySearchViewModel(
         val pages = vacanciesSearchData?.pages
         if (page != null &&
             pages != null &&
-            page - 1 < pages
+            page + 1 < pages
         ) {
             stateLiveData.value = VacancySearchScreenState.PaginationLoading
             nextSearchDebounce(changedText)

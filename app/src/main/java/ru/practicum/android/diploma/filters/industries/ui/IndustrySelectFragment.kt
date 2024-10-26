@@ -111,6 +111,7 @@ class IndustrySelectFragment : Fragment() {
     private fun onIndustryClick(industry: Industry) {
         binding.applyButton.isVisible = true
         viewModel.onItemClick(industry)
+        adapter.notifyDataSetChanged()
     }
 
     private fun render(state: IndustrySelectScreenState) {
@@ -169,17 +170,12 @@ class IndustrySelectFragment : Fragment() {
     }
 
     private fun showFilteredResult(request: String) {
-        view?.hideKeyboard()
         adapter.filterResults(request)
 
         binding.progressCircular.isVisible = false
         binding.serverErrorPlaceholder.isVisible = false
         binding.notConnectedPlaceholder.isVisible = false
-        if (adapter.list.isEmpty()) {
-            binding.notFoundPlaceholder.isVisible = true
-        } else {
-            binding.recyclerView.isVisible = true
-        }
+        binding.notFoundPlaceholder.isVisible = adapter.list.isEmpty() && request.isNotEmpty()
     }
 
     private fun clearButtonVisibility(s: CharSequence?) {
@@ -189,7 +185,7 @@ class IndustrySelectFragment : Fragment() {
     }
 
     private fun clearFilter() {
-        viewModel.loadIndustries()
+        view?.hideKeyboard()
         binding.searchLine.setText(DEF_TEXT)
     }
 

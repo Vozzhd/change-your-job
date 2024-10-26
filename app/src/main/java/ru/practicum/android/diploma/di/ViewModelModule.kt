@@ -3,17 +3,17 @@ package ru.practicum.android.diploma.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.favorite.presentation.FavoriteVacancyViewModel
-import ru.practicum.android.diploma.filters.areas.presentation.AreaSelectViewModel
-import ru.practicum.android.diploma.filters.areas.presentation.RegionSelectViewModel
+import ru.practicum.android.diploma.filters.areas.presentation.BaseAreaSelectViewModel
+import ru.practicum.android.diploma.filters.areas.presentation.country.CountrySelectViewModel
+import ru.practicum.android.diploma.filters.areas.presentation.region.RegionSelectViewModel
 import ru.practicum.android.diploma.filters.base.presentation.FilterSettingsViewModel
 import ru.practicum.android.diploma.filters.industries.presentation.IndustrySelectViewModel
-import ru.practicum.android.diploma.filters.presentation.CountrySelectViewModel
 import ru.practicum.android.diploma.search.presentation.VacancySearchViewModel
 import ru.practicum.android.diploma.vacancy.presentation.VacancyDetailsViewModel
 
 val viewModelModule = module {
     viewModel {
-        VacancySearchViewModel(get())
+        VacancySearchViewModel(get(), get())
     }
 
     viewModel {
@@ -41,6 +41,6 @@ val viewModelModule = module {
     }
 
     viewModel {
-        AreaSelectViewModel(get(), get())
+        BaseAreaSelectViewModel(get())
     }
 }

@@ -14,9 +14,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.RegionSelectFragmentBinding
 import ru.practicum.android.diploma.filters.areas.domain.models.Area
-import ru.practicum.android.diploma.filters.areas.presentation.RegionSelectViewModel
-import ru.practicum.android.diploma.filters.areas.ui.presentation.RegionSelectScreenState
+import ru.practicum.android.diploma.filters.areas.presentation.region.RegionSelectScreenState
+import ru.practicum.android.diploma.filters.areas.presentation.region.RegionSelectViewModel
+import ru.practicum.android.diploma.filters.areas.ui.presenter.RegionSelectRecyclerViewAdapter
 import ru.practicum.android.diploma.filters.industries.ui.IndustrySelectFragment
+import ru.practicum.android.diploma.root.ui.RootActivity
 import ru.practicum.android.diploma.util.hideKeyboard
 
 class RegionSelectFragment : Fragment() {
@@ -78,11 +80,6 @@ class RegionSelectFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.getAllRegions()
-    }
-
     private fun clearButtonVisibility(text: CharSequence?) {
         val visibility = !text.isNullOrEmpty()
         binding.searchLineCleaner.isVisible = visibility
@@ -90,7 +87,8 @@ class RegionSelectFragment : Fragment() {
     }
 
     private fun onAreaClick(area: Area) {
-        viewModel.finishSelect(area.id)
+        val countryList = (activity as RootActivity).getCountryList()
+        viewModel.finishSelect(area, countryList)
         findNavController().popBackStack()
     }
 
@@ -101,39 +99,60 @@ class RegionSelectFragment : Fragment() {
             RegionSelectScreenState.NetworkError -> showNetworkError()
             RegionSelectScreenState.ServerError -> showServerError()
             is RegionSelectScreenState.FilterRequest -> showFilteredResult(state.request)
+            is RegionSelectScreenState.Loading -> showLoading()
         }
     }
 
+    private fun showLoading() {
+        binding.notConnectedPlaceholder.isVisible = false
+        binding.recyclerView.isVisible = false
+        binding.emptyPlaceholder.isVisible = false
+        binding.notFoundPlaceholder.isVisible = false
+        binding.progressCircular.isVisible = true
+    }
+
     private fun showContent(item: List<Area>) {
+        binding.notConnectedPlaceholder.isVisible = false
         binding.recyclerView.isVisible = true
         binding.emptyPlaceholder.isVisible = false
         binding.notFoundPlaceholder.isVisible = false
+        binding.progressCircular.isVisible = false
         adapter.list.clear()
         adapter.list.addAll(item)
         adapter.notifyDataSetChanged()
     }
 
     private fun showFilteredResult(request: String) {
-        view?.hideKeyboard()
         adapter.filterResults(request)
+        binding.recyclerView.isVisible = true
+        binding.notFoundPlaceholder.isVisible = adapter.list.isEmpty() && request.isNotEmpty()
+        binding.notConnectedPlaceholder.isVisible = false
+        binding.emptyPlaceholder.isVisible = false
+        binding.progressCircular.isVisible = false
     }
 
     private fun showEmpty() {
+        binding.notConnectedPlaceholder.isVisible = false
         binding.notFoundPlaceholder.isVisible = true
         binding.recyclerView.isVisible = false
         binding.emptyPlaceholder.isVisible = false
+        binding.progressCircular.isVisible = false
     }
 
     private fun showNetworkError() {
+        binding.notConnectedPlaceholder.isVisible = true
         binding.notFoundPlaceholder.isVisible = false
         binding.recyclerView.isVisible = false
-        binding.emptyPlaceholder.isVisible = true
+        binding.emptyPlaceholder.isVisible = false
+        binding.progressCircular.isVisible = false
     }
 
     private fun showServerError() {
+        binding.notConnectedPlaceholder.isVisible = false
         binding.notFoundPlaceholder.isVisible = false
         binding.recyclerView.isVisible = false
         binding.emptyPlaceholder.isVisible = true
+        binding.progressCircular.isVisible = false
         binding.image.setImageResource(R.drawable.search_server_error_placeholder)
         binding.text.setText(R.string.server_error)
     }
@@ -144,7 +163,7 @@ class RegionSelectFragment : Fragment() {
     }
 
     private fun clearFilter() {
-        viewModel.getAllRegions()
+        view?.hideKeyboard()
         binding.searchLine.setText(IndustrySelectFragment.DEF_TEXT)
     }
 

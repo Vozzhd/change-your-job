@@ -4,6 +4,8 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
     tool:context=".filters.base.ui.FilterSettingsFragment">
 
     <Toolbar
@@ -13,7 +15,7 @@
         android:layout_height="wrap_content"
         android:contentInsetStartWithNavigation="0dp"
         android:navigationIcon="@drawable/ic_arrow_back_24px"
-        android:paddingVertical="4dp"
+        android:paddingVertical="0dp"
         android:title="@string/filter_settings"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -123,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/padding_horizontal_size_16"
-        android:layout_marginTop="@dimen/filter_item_margin"
+        android:layout_marginTop="@dimen/filter_salary_margin"
         android:buttonTint="@color/blue"
         android:minWidth="0dp"
         android:minHeight="0dp"

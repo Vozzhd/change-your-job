@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filters.ui.presenter
+package ru.practicum.android.diploma.filters.areas.ui.presenter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.AreaCardBinding
 import ru.practicum.android.diploma.filters.areas.domain.models.Area
 
-class AreasRecyclerViewAdapter(
+class CountriesRecyclerViewAdapter(
     private val clickListener: AreaClickListener
 ) : RecyclerView.Adapter<AreaViewHolder>() {
 

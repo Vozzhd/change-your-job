@@ -16,10 +16,13 @@ class SalaryCurrencySignFormater(private val context: Context) {
 
         return if (salary?.to == null && salary?.from != null) {
             "$from ${formatter.format(salary.from.toInt())} $currency"
+                .replace(',', ' ')
         } else if (salary?.to != null && salary.from == null) {
             "$to ${formatter.format(salary.to.toInt())} $currency"
+                .replace(',', ' ')
         } else if (salary?.to != null && salary.from != null) {
             "$from ${formatter.format(salary.from.toInt())} $to ${formatter.format(salary.to.toInt())} $currency"
+                .replace(',', ' ')
         } else {
             context.getString(R.string.without_salary)
         }

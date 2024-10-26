@@ -1,17 +1,18 @@
-package ru.practicum.android.diploma.filters.areas.ui
+package ru.practicum.android.diploma.filters.areas.ui.presenter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.AreaCardBinding
 import ru.practicum.android.diploma.filters.areas.domain.models.Area
-import ru.practicum.android.diploma.filters.ui.presenter.AreaViewHolder
 
 class RegionSelectRecyclerViewAdapter(
     private val clickListener: RegionSelectClickListener
 ) : RecyclerView.Adapter<AreaViewHolder>() {
 
     var list = mutableListOf<Area>()
+    private var previousList = mutableListOf<Area>()
+    private var previousRequest: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -32,11 +33,26 @@ class RegionSelectRecyclerViewAdapter(
     }
 
     fun filterResults(request: String) {
+        if (request.isNotEmpty()
+            && previousRequest.isNotEmpty()
+            && previousRequest.contains(request)
+        ) {
+            list.clear()
+            list.addAll(previousList)
+        }
+
         val filteredList = list.filter { area ->
             area.name
                 .lowercase()
                 .contains(request)
         }
+
+        if (filteredList.isNotEmpty()) {
+            previousList.clear()
+            previousList.addAll(list)
+        }
+        previousRequest = request
+
         list.clear()
         list.addAll(filteredList)
         notifyDataSetChanged()

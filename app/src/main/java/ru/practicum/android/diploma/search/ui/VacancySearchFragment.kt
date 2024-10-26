@@ -175,6 +175,7 @@ class VacancySearchFragment : Fragment() {
 
     private fun showLoadingProgress() {
         adapter.notifyDataSetChanged()
+        binding.recyclerView.visibility = View.GONE
         binding.blueTextView.visibility = View.GONE
         binding.defaultSearchPlaceholder.visibility = View.GONE
         binding.notConnectedPlaceholder.visibility = View.GONE
@@ -268,6 +269,21 @@ class VacancySearchFragment : Fragment() {
                 isClickAllowed = true
             }
         }
+    }
+
+    private fun checkFilter() {
+        if (viewModel.checkFilter()) {
+            binding.filterButton.setImageResource(R.drawable.ic_filter_on_24px)
+        } else {
+            binding.filterButton.setImageResource(R.drawable.ic_filter_off_24px)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkFilter()
+        viewModel.searchDebounce(DEF_TEXT)
+        viewModel.loadData(inputTextValue)
     }
 
     override fun onDestroyView() {
